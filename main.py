@@ -55,11 +55,15 @@ while run:
     # player controls and collision detection
     keys = pygame.key.get_pressed()
 
+    if not keys[pygame.K_w] or keys[pygame.K_a] or keys[pygame.K_s] or keys[pygame.K_d]:
+        player.walking = False
+
     if keys[pygame.K_w]:  # check for keystrokes
         player.faceDirection = "U"
         if player.y_pos > current_map.map_bounds_upper:  # check bounds
             current_map.detect_collisions(player)
             if player.can_move_up:
+                player.walking = True
                 player.move_up()
 
     if keys[pygame.K_a]:
@@ -67,6 +71,7 @@ while run:
         if player.x_pos > current_map.map_bounds_left:
             current_map.detect_collisions(player)
             if player.can_move_left:
+                player.walking = True
                 player.move_left()
 
     if keys[pygame.K_s]:
@@ -74,6 +79,7 @@ while run:
         if player.y_pos < current_map.map_bounds_lower:
             current_map.detect_collisions(player)
             if player.can_move_down:
+                player.walking = True
                 player.move_down()
 
     if keys[pygame.K_d]:
@@ -81,6 +87,7 @@ while run:
         if player.x_pos < current_map.map_bounds_right:
             current_map.detect_collisions(player)
             if player.can_move_right:
+                player.walking = True
                 player.move_right()
 
     # game loop actions
