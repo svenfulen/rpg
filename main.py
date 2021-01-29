@@ -4,30 +4,19 @@ import player
 
 # MODES, CONSTANTS
 fps = 40  # frame rate
-WINDOW_X, WINDOW_Y = 800, 600
+WINDOW_X, WINDOW_Y = 800, 600  # Game window size
+WINDOW_X_area, WINDOW_Y_area = 320, 240  # zoom window size
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
-FULL_SCREEN_MODE = False
-
 
 pygame.init()  # starts pygame
-window = pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)  # creates game window
-world = pygame.Surface((1600, 1600))
-
-
-# Returns a window mode, so you can just say world = set_full_screen(true) or (false)
-def set_full_screen(boolean):
-    if boolean:
-        return pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)
-    else:
-        return pygame.display.set_mode(WINDOW_SIZE)  # initializes game window, sets size
+window = pygame.display.set_mode((WINDOW_X, WINDOW_Y), pygame.FULLSCREEN)  # creates game window
+window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
+world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
 
 
 pygame.display.set_caption("rpg")  # Sets the title for the game window
 # static graphics data
 terrain_default = map.tileset("assets/graphics/overworld.png", 32, 32)
-
-# ui
-ui = pygame.Surface(WINDOW_SIZE)
 
 # current map data
 current_map_name = "test_collision_3"
@@ -94,6 +83,6 @@ while run:
     player.draw(world)  # draw the player, needs to be refreshed every frame
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player
 
-    window.blit(world, (-player.x_pos + (WINDOW_X / 2), -player.y_pos + (WINDOW_Y / 2)))
-
+    window_area.blit(world, (-player.x_pos - 16 + (WINDOW_X_area / 2), -player.y_pos - 16 + (WINDOW_Y_area / 2)))
+    pygame.transform.scale(window_area, (WINDOW_X, WINDOW_Y), window)
     pygame.display.flip()
