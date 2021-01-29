@@ -4,18 +4,14 @@ import player
 
 # MODES, CONSTANTS
 fps = 40  # frame rate
-WINDOW_X, WINDOW_Y = 1024, 768
+WINDOW_X, WINDOW_Y = 800, 600
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
-CAMERA_ZOOM = 3
-CAMERA_SIZE = ((WINDOW_X * CAMERA_ZOOM), (WINDOW_Y * CAMERA_ZOOM))
-CAMERA_X_POS = 0
-CAMERA_Y_POS = 0
-CAMERA_ON = True  # for testing purposes
 FULL_SCREEN_MODE = False
 
 
 pygame.init()  # starts pygame
-world = pygame.display.set_mode(WINDOW_SIZE)  # creates game window
+window = pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)  # creates game window
+world = pygame.Surface((1600, 1600))
 
 
 # Returns a window mode, so you can just say world = set_full_screen(true) or (false)
@@ -27,9 +23,11 @@ def set_full_screen(boolean):
 
 
 pygame.display.set_caption("rpg")  # Sets the title for the game window
-camera = pygame.Surface(CAMERA_SIZE)
 # static graphics data
 terrain_default = map.tileset("assets/graphics/overworld.png", 32, 32)
+
+# ui
+ui = pygame.Surface(WINDOW_SIZE)
 
 # current map data
 current_map_name = "test_collision_3"
@@ -95,11 +93,7 @@ while run:
     current_map.load_terrain(world, 32, 32)  # load tiles that are below the player
     player.draw(world)  # draw the player, needs to be refreshed every frame
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player
-    CAMERA_X_POS = ((-player.x_pos) * CAMERA_ZOOM) + 300
-    CAMERA_Y_POS = ((-player.y_pos) * CAMERA_ZOOM) + 250
-    pygame.transform.scale(world, CAMERA_SIZE, camera)  # zooms the camera in
-    world.fill((0, 0, 0))  # makes the background black
-    if CAMERA_ON:
-        world.blit(camera, (CAMERA_X_POS, CAMERA_Y_POS))
+
+    window.blit(world, (-player.x_pos + (WINDOW_X / 2), -player.y_pos + (WINDOW_Y / 2)))
 
     pygame.display.flip()
