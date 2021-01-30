@@ -9,7 +9,7 @@ WINDOW_X_area, WINDOW_Y_area = 320, 240  # zoom window size
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
 
 pygame.init()  # starts pygame
-window = pygame.display.set_mode((WINDOW_X, WINDOW_Y), pygame.FULLSCREEN)  # creates game window
+window = pygame.display.set_mode((WINDOW_X, WINDOW_Y))  # creates game window
 window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
 world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
 
@@ -19,13 +19,14 @@ pygame.display.set_caption("rpg")  # Sets the title for the game window
 terrain_default = map.tileset("assets/graphics/overworld.png", 32, 32)
 
 # current map data
-current_map_name = "test_collision_3"
+current_map_name = "dungeon_roofs"
 current_map = map.Map("maps/" + current_map_name + ".json", terrain_default)
 current_map.load_collisions()
+current_map.load_roofs()
 
 # player object
-spawn_location_x = 24
-spawn_location_y = 24
+spawn_location_x = 64
+spawn_location_y = 32
 player = player.Player()
 
 # loading game objects
@@ -79,10 +80,14 @@ while run:
 
     # game loop actions
 
+    # load things into the game world
     current_map.load_terrain(world, 32, 32)  # load tiles that are below the player
     player.draw(world)  # draw the player, needs to be refreshed every frame
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player
+    # current map detect roof collisions
+    current_map.draw_roofs(world, player, 32, 32)  # draw the roof tiles
 
+    # blit/scale everything to the game window
     window_area.blit(world, (-player.x_pos - 16 + (WINDOW_X_area / 2), -player.y_pos - 16 + (WINDOW_Y_area / 2)))
     pygame.transform.scale(window_area, (WINDOW_X, WINDOW_Y), window)
     pygame.display.flip()
