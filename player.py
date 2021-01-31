@@ -32,6 +32,8 @@ class Player:
         # player location/velocity/state info
         self.x_pos = 50
         self.y_pos = 50
+        self.x_tile = int(self.x_pos / 32)  # These are estimations of the tile the player will be on
+        self.y_tile = int(self.y_pos / 32)
         self.walk_speed = 3
         self.walking = False  # If the player is currently moving
         self.walkCount = 0
@@ -104,17 +106,17 @@ class Player:
         # pygame.draw.rect(surface_to_draw, (0, 255, 0), self.right_rect, 1)
 
     def move_up(self):
-        # walking = True  (need to set these statements to false when not walking)
         self.y_pos = self.y_pos - self.walk_speed
+        self.y_tile = int(self.y_pos / 32)
 
     def move_down(self):
-        # walking = True
         self.y_pos = self.y_pos + self.walk_speed
+        self.y_tile = int(self.y_pos / 32)
 
     def move_left(self):
-        # walking = True
         self.x_pos = self.x_pos - self.walk_speed
+        self.x_tile = int(self.x_pos / 32)
 
     def move_right(self):
-        # walking = True
         self.x_pos = self.x_pos + self.walk_speed
+        self.x_tile = int(self.x_pos / 32)
