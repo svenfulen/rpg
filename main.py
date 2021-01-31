@@ -9,6 +9,7 @@ WINDOW_X_area, WINDOW_Y_area = 320, 240  # zoom window size
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
 
 pygame.init()  # starts pygame
+clock = pygame.time.Clock()
 window = pygame.display.set_mode((WINDOW_X, WINDOW_Y))  # creates game window
 window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
 world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
@@ -32,12 +33,17 @@ player = player.Player()
 player.spawn(world, spawn_location_x, spawn_location_y)  # spawn the player on the map at position x , y
 
 run = True
+start_time = None
 while run:
     pygame.time.delay(int(1000 / fps))  # frame refresh
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.attacking = True
+                start_time = pygame.time.get_ticks()
 
     # player controls and collision detection
     keys = pygame.key.get_pressed()
@@ -81,7 +87,7 @@ while run:
 
     # load things into the game world
     current_map.load_terrain(world, 32, 32)  # load tiles that are below the player
-    player.draw(world)  # draw the player, needs to be refreshed every frame
+    player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player
 
     # blit/scale everything to the game window

@@ -9,31 +9,39 @@ class Player:
         self.tx_face_up = pygame.image.load("E:/game/assets/graphics/chars/base/up.png")
         self.tx_face_right = pygame.image.load("E:/game/assets/graphics/chars/base/right.png")
 
+        # Walk animations
         self.tx_walk_down = [pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_1.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_2.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_3.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_4.png")]
+                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_2.png"),
+                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_3.png"),
+                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_4.png")]
 
         self.tx_walk_left = [pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_1.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_2.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_3.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_4.png")]
+                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_2.png"),
+                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_3.png"),
+                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_4.png")]
 
         self.tx_walk_up = [pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_1.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_2.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_3.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_4.png")]
+                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_2.png"),
+                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_3.png"),
+                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_4.png")]
 
         self.tx_walk_right = [pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_1.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_2.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_3.png"),
-                            pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_4.png")]
+                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_2.png"),
+                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_3.png"),
+                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_4.png")]
+
+        # Stab attack animations
+        self.tx_stab_down = pygame.image.load("E:/game/assets/graphics/chars/base/stab/down_hit.png")
+        self.tx_stab_left = pygame.image.load("E:/game/assets/graphics/chars/base/stab/left_hit.png")
+        self.tx_stab_up = pygame.image.load("E:/game/assets/graphics/chars/base/stab/up_hit.png")
+        self.tx_stab_right = pygame.image.load("E:/game/assets/graphics/chars/base/stab/right_hit.png")
 
         # player location/velocity/state info
         self.x_pos = 50
         self.y_pos = 50
         self.x_tile = int(self.x_pos / 32)  # These are estimations of the tile the player will be on
         self.y_tile = int(self.y_pos / 32)
+        self.attacking = False
         self.walk_speed = 3
         self.walking = False  # If the player is currently moving
         self.walkCount = 0
@@ -43,6 +51,7 @@ class Player:
         self.can_move_left = True
         self.can_move_right = True
 
+        # player collision data
         self.hit_box = ((self.x_pos + 10), (self.y_pos + 3), 12, 28)
         self.T_R = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
         self.B_R = ((self.x_pos + 10), (self.y_pos + 30), 12, 1)
@@ -59,34 +68,61 @@ class Player:
         self.x_pos = x
         self.y_pos = y
 
-    def draw(self, surface_to_draw):  # draws the player every frame
+    def draw(self, surface_to_draw, timer):  # draws the player every frame
         if self.walkCount + 1 >= 16:
             self.walkCount = 0
 
         if self.faceDirection == "D":
-            if self.walking:
-                surface_to_draw.blit(self.tx_walk_down[self.walkCount//4], (self.x_pos, self.y_pos))
-                self.walkCount += 1
-            if not self.walking:
-                surface_to_draw.blit(self.tx_face_down, (self.x_pos, self.y_pos))
+            if self.attacking:
+                time_since_enter = pygame.time.get_ticks() - timer
+                surface_to_draw.blit(self.tx_stab_down, (self.x_pos, self.y_pos))
+                if time_since_enter >= 100:
+                    self.attacking = False
+            else:
+                if self.walking:
+                    surface_to_draw.blit(self.tx_walk_down[self.walkCount//4], (self.x_pos, self.y_pos))
+                    self.walkCount += 1
+                if not self.walking:
+                    surface_to_draw.blit(self.tx_face_down, (self.x_pos, self.y_pos))
+
         if self.faceDirection == "L":
-            if self.walking:
-                surface_to_draw.blit(self.tx_walk_left[self.walkCount//4], (self.x_pos, self.y_pos))
-                self.walkCount += 1
-            if not self.walking:
-                surface_to_draw.blit(self.tx_face_left, (self.x_pos, self.y_pos))
+            if self.attacking:
+                time_since_enter = pygame.time.get_ticks() - timer
+                surface_to_draw.blit(self.tx_stab_left, (self.x_pos, self.y_pos))
+                if time_since_enter >= 100:
+                    self.attacking = False
+            else:
+                if self.walking:
+                    surface_to_draw.blit(self.tx_walk_left[self.walkCount//4], (self.x_pos, self.y_pos))
+                    self.walkCount += 1
+                if not self.walking:
+                    surface_to_draw.blit(self.tx_face_left, (self.x_pos, self.y_pos))
+
         if self.faceDirection == "U":
-            if self.walking:
-                surface_to_draw.blit(self.tx_walk_up[self.walkCount//4], (self.x_pos, self.y_pos))
-                self.walkCount += 1
-            if not self.walking:
-                surface_to_draw.blit(self.tx_face_up, (self.x_pos, self.y_pos))
+            if self.attacking:
+                time_since_enter = pygame.time.get_ticks() - timer
+                surface_to_draw.blit(self.tx_stab_up, (self.x_pos, self.y_pos))
+                if time_since_enter >= 100:
+                    self.attacking = False
+            else:
+                if self.walking:
+                    surface_to_draw.blit(self.tx_walk_up[self.walkCount//4], (self.x_pos, self.y_pos))
+                    self.walkCount += 1
+                if not self.walking:
+                    surface_to_draw.blit(self.tx_face_up, (self.x_pos, self.y_pos))
+
         if self.faceDirection == "R":
-            if self.walking:
-                surface_to_draw.blit(self.tx_walk_right[self.walkCount//4], (self.x_pos, self.y_pos))
-                self.walkCount += 1
-            if not self.walking:
-                surface_to_draw.blit(self.tx_face_right, (self.x_pos, self.y_pos))
+            if self.attacking:
+                time_since_enter = pygame.time.get_ticks() - timer
+                surface_to_draw.blit(self.tx_stab_right, (self.x_pos, self.y_pos))
+                if time_since_enter >= 100:
+                    self.attacking = False
+            else:
+                if self.walking:
+                    surface_to_draw.blit(self.tx_walk_right[self.walkCount//4], (self.x_pos, self.y_pos))
+                    self.walkCount += 1
+                if not self.walking:
+                    surface_to_draw.blit(self.tx_face_right, (self.x_pos, self.y_pos))
 
         self.hit_box = ((self.x_pos + 10), (self.y_pos + 3), 12, 28)
         self.T_R = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
@@ -120,3 +156,5 @@ class Player:
     def move_right(self):
         self.x_pos = self.x_pos + self.walk_speed
         self.x_tile = int(self.x_pos / 32)
+
+    # def attack(self, surface_to_draw):
