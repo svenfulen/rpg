@@ -1,13 +1,8 @@
 import pygame
-import json
-
+import items
 
 class Player:
     def __init__(self):
-        # get items
-        with open("data/items.json") as f:
-            self.items = json.load(f)
-
         # player textures
         self.tx_face_down = pygame.image.load("assets/graphics/chars/base/down.png")
         self.tx_face_left = pygame.image.load("assets/graphics/chars/base/left.png")
@@ -42,7 +37,10 @@ class Player:
         self.tx_stab_right = pygame.image.load("assets/graphics/chars/base/stab/right_hit.png")
 
         # player equipment data
-        self.weapon = "test_sword"
+        self.weapon_equipped = True
+        self.weapon = items.Weapon("test_sword")
+
+        # Player equipment graphics
 
         # player location/velocity/state info
         self.x_pos = 50
@@ -84,53 +82,77 @@ class Player:
             if self.attacking:
                 time_since_enter = pygame.time.get_ticks() - timer
                 surface_to_draw.blit(self.tx_stab_down, (self.x_pos, self.y_pos))
+                if self.weapon_equipped:
+                    surface_to_draw.blit(self.weapon.down_attack_texture, (self.x_pos, self.y_pos))
                 if time_since_enter >= 100:
                     self.attacking = False
             else:
                 if self.walking:
                     surface_to_draw.blit(self.tx_walk_down[self.walkCount//4], (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.walk_down_texture[self.walkCount//4], (self.x_pos, self.y_pos))
                     self.walkCount += 1
                 if not self.walking:
                     surface_to_draw.blit(self.tx_face_down, (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.face_down_texture, (self.x_pos, self.y_pos))
 
         if self.faceDirection == "L":
             if self.attacking:
                 time_since_enter = pygame.time.get_ticks() - timer
                 surface_to_draw.blit(self.tx_stab_left, (self.x_pos, self.y_pos))
+                if self.weapon_equipped:
+                    surface_to_draw.blit(self.weapon.left_attack_texture, (self.x_pos, self.y_pos))
                 if time_since_enter >= 100:
                     self.attacking = False
             else:
                 if self.walking:
                     surface_to_draw.blit(self.tx_walk_left[self.walkCount//4], (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.walk_left_texture[self.walkCount//4], (self.x_pos, self.y_pos))
                     self.walkCount += 1
                 if not self.walking:
                     surface_to_draw.blit(self.tx_face_left, (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.face_left_texture, (self.x_pos, self.y_pos))
 
         if self.faceDirection == "U":
             if self.attacking:
                 time_since_enter = pygame.time.get_ticks() - timer
                 surface_to_draw.blit(self.tx_stab_up, (self.x_pos, self.y_pos))
+                if self.weapon_equipped:
+                    surface_to_draw.blit(self.weapon.up_attack_texture, (self.x_pos, self.y_pos))
                 if time_since_enter >= 100:
                     self.attacking = False
             else:
                 if self.walking:
                     surface_to_draw.blit(self.tx_walk_up[self.walkCount//4], (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.walk_up_texture[self.walkCount//4], (self.x_pos, self.y_pos))
                     self.walkCount += 1
                 if not self.walking:
                     surface_to_draw.blit(self.tx_face_up, (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.face_up_texture, (self.x_pos, self.y_pos))
 
         if self.faceDirection == "R":
             if self.attacking:
                 time_since_enter = pygame.time.get_ticks() - timer
                 surface_to_draw.blit(self.tx_stab_right, (self.x_pos, self.y_pos))
+                if self.weapon_equipped:
+                    surface_to_draw.blit(self.weapon.right_attack_texture, (self.x_pos, self.y_pos))
                 if time_since_enter >= 100:
                     self.attacking = False
             else:
                 if self.walking:
                     surface_to_draw.blit(self.tx_walk_right[self.walkCount//4], (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.walk_right_texture[self.walkCount//4], (self.x_pos, self.y_pos))
                     self.walkCount += 1
                 if not self.walking:
                     surface_to_draw.blit(self.tx_face_right, (self.x_pos, self.y_pos))
+                    if self.weapon_equipped:
+                        surface_to_draw.blit(self.weapon.face_right_texture, (self.x_pos, self.y_pos))
 
         self.hit_box = ((self.x_pos + 10), (self.y_pos + 3), 12, 28)
         self.T_R = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)

@@ -1,5 +1,4 @@
-{
-"equipment":[
+{"equipment":[
 	{
 	"weapons":[
 		{
@@ -7,22 +6,22 @@
 			{
 			"textures":[
 				{
-				"up":"assets/graphics/weapons/test_sword/up.png"
-				"down":"assets/graphics/weapons/test_sword/down.png"
-				"left":"assets/graphics/weapons/test_sword/left.png"
-				"right":"assets/graphics/weapons/test_sword/right.png"
-				"up_walk":
-				"down_walk":
-				"left_walk":
-				"right_walk":
-				"up_attack":
-				"down_attack":
-				"left_attack":
-				"right_attack":
-				}]
+				"up":"assets/graphics/weapons/test_sword/up.png",
+				"down":"assets/graphics/weapons/test_sword/down.png",
+				"left":"assets/graphics/weapons/test_sword/left.png",
+				"right":"assets/graphics/weapons/test_sword/right.png",
+				"up_walk":["assets/graphics/weapons/test_sword/walk_u/uw_1.png", "assets/graphics/weapons/test_sword/walk_u/uw_2.png", "assets/graphics/weapons/test_sword/walk_u/uw_3.png", "assets/graphics/weapons/test_sword/walk_u/uw_4.png"],
+				"down_walk":["assets/graphics/weapons/test_sword/walk_d/dw_1.png", "assets/graphics/weapons/test_sword/walk_d/dw_2.png", "assets/graphics/weapons/test_sword/walk_d/dw_3.png", "assets/graphics/weapons/test_sword/walk_d/dw_4.png"],
+				"left_walk":["assets/graphics/weapons/test_sword/walk_l/lw_1.png", "assets/graphics/weapons/test_sword/walk_l/lw_2.png", "assets/graphics/weapons/test_sword/walk_l/lw_3.png", "assets/graphics/weapons/test_sword/walk_l/lw_4.png"],
+				"right_walk":["assets/graphics/weapons/test_sword/walk_r/rw_1.png", "assets/graphics/weapons/test_sword/walk_r/rw_2.png", "assets/graphics/weapons/test_sword/walk_r/rw_3.png", "assets/graphics/weapons/test_sword/walk_r/rw_4.png"],
+				"up_attack":"assets/graphics/weapons/test_sword/attack_u.png",
+				"down_attack":"assets/graphics/weapons/test_sword/attack_d.png",
+				"left_attack":"assets/graphics/weapons/test_sword/attack_l.png",
+				"right_attack":"assets/graphics/weapons/test_sword/attack_r.png"
+				}],
 			"damage":5,
 			"description":"a sword that transcends reality",
-			"attacktype":"stab"
+			"attack_type":"stab"
 			}]
 		}]
 	}]
