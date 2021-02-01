@@ -10,7 +10,7 @@ WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
 
 pygame.init()  # starts pygame
 clock = pygame.time.Clock()
-window = pygame.display.set_mode((WINDOW_X, WINDOW_Y))  # creates game window
+window = pygame.display.set_mode((WINDOW_X, WINDOW_Y), pygame.FULLSCREEN)  # creates game window
 window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
 world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
 

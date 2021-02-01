@@ -1,40 +1,48 @@
 import pygame
+import json
 
 
 class Player:
     def __init__(self):
+        # get items
+        with open("data/items.json") as f:
+            self.items = json.load(f)
+
         # player textures
-        self.tx_face_down = pygame.image.load("E:/game/assets/graphics/chars/base/down.png")
-        self.tx_face_left = pygame.image.load("E:/game/assets/graphics/chars/base/left.png")
-        self.tx_face_up = pygame.image.load("E:/game/assets/graphics/chars/base/up.png")
-        self.tx_face_right = pygame.image.load("E:/game/assets/graphics/chars/base/right.png")
+        self.tx_face_down = pygame.image.load("assets/graphics/chars/base/down.png")
+        self.tx_face_left = pygame.image.load("assets/graphics/chars/base/left.png")
+        self.tx_face_up = pygame.image.load("assets/graphics/chars/base/up.png")
+        self.tx_face_right = pygame.image.load("assets/graphics/chars/base/right.png")
 
         # Walk animations
-        self.tx_walk_down = [pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_1.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_2.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_3.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/down_walk/dw_4.png")]
+        self.tx_walk_down = [pygame.image.load("assets/graphics/chars/base/down_walk/dw_1.png"),
+                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_2.png"),
+                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_3.png"),
+                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_4.png")]
 
-        self.tx_walk_left = [pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_1.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_2.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_3.png"),
-                             pygame.image.load("E:/game/assets/graphics/chars/base/left_walk/lw_4.png")]
+        self.tx_walk_left = [pygame.image.load("assets/graphics/chars/base/left_walk/lw_1.png"),
+                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_2.png"),
+                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_3.png"),
+                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_4.png")]
 
-        self.tx_walk_up = [pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_1.png"),
-                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_2.png"),
-                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_3.png"),
-                           pygame.image.load("E:/game/assets/graphics/chars/base/up_walk/uw_4.png")]
+        self.tx_walk_up = [pygame.image.load("assets/graphics/chars/base/up_walk/uw_1.png"),
+                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_2.png"),
+                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_3.png"),
+                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_4.png")]
 
-        self.tx_walk_right = [pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_1.png"),
-                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_2.png"),
-                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_3.png"),
-                              pygame.image.load("E:/game/assets/graphics/chars/base/right_walk/rw_4.png")]
+        self.tx_walk_right = [pygame.image.load("assets/graphics/chars/base/right_walk/rw_1.png"),
+                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_2.png"),
+                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_3.png"),
+                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_4.png")]
 
         # Stab attack animations
-        self.tx_stab_down = pygame.image.load("E:/game/assets/graphics/chars/base/stab/down_hit.png")
-        self.tx_stab_left = pygame.image.load("E:/game/assets/graphics/chars/base/stab/left_hit.png")
-        self.tx_stab_up = pygame.image.load("E:/game/assets/graphics/chars/base/stab/up_hit.png")
-        self.tx_stab_right = pygame.image.load("E:/game/assets/graphics/chars/base/stab/right_hit.png")
+        self.tx_stab_down = pygame.image.load("assets/graphics/chars/base/stab/down_hit.png")
+        self.tx_stab_left = pygame.image.load("assets/graphics/chars/base/stab/left_hit.png")
+        self.tx_stab_up = pygame.image.load("assets/graphics/chars/base/stab/up_hit.png")
+        self.tx_stab_right = pygame.image.load("assets/graphics/chars/base/stab/right_hit.png")
+
+        # player equipment data
+        self.weapon = "test_sword"
 
         # player location/velocity/state info
         self.x_pos = 50

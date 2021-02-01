@@ -1,0 +1,29 @@
+{
+"equipment":[
+	{
+	"weapons":[
+		{
+		"test_sword":[
+			{
+			"textures":[
+				{
+				"up":"assets/graphics/weapons/test_sword/up.png"
+				"down":"assets/graphics/weapons/test_sword/down.png"
+				"left":"assets/graphics/weapons/test_sword/left.png"
+				"right":"assets/graphics/weapons/test_sword/right.png"
+				"up_walk":
+				"down_walk":
+				"left_walk":
+				"right_walk":
+				"up_attack":
+				"down_attack":
+				"left_attack":
+				"right_attack":
+				}]
+			"damage":5,
+			"description":"a sword that transcends reality",
+			"attacktype":"stab"
+			}]
+		}]
+	}]
+}

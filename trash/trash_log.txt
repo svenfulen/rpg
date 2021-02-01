@@ -1,0 +1,13 @@
+camera.py
+
+This was supposed to be a class for the camera.  I found a better way to do it.
+
+
+camera_tests.py
+
+This is someone else's script I learned from to make the camera movement work.
+
+
+stupid_glitchy_roofs.py
+
+This is some functions that I wrote for a roof system I did not complete.
