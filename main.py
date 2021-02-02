@@ -28,10 +28,9 @@ current_map.load_collisions()
 spawn_location_x = 64
 spawn_location_y = 32
 player = player.Player()
-
 # loading game objects
 player.spawn(world, spawn_location_x, spawn_location_y)  # spawn the player on the map at position x , y
-
+enemy.spawn(world, 64, 64)
 run = True
 start_time = None
 while run:
