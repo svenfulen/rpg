@@ -1,0 +1,28 @@
+Roofs:
+	Drawn onto the world Surface last.  This layer is on top of all other layers.
+
+Buildings:
+	Drawn onto the world Surface after moving objects.  Objects can pass under this layer.
+	
+Players / NPCs / Objects:
+	These objects can move around, drawn on top of terrain (which is basically the floor)
+	
+Terrain
+	This layer is drawn under everything else.
+	
+When these things are loaded in order Terrain > Players > Buildings > Roofs
+it creates an illusion of a 2 dimensional world.
+
+Maps are created in Tiled map editor, where the layers look similar.
+Layers have to be input to Tiled this way for map.py to load the json files correctly.
+
+Layer 1 in tiled: Terrain (TILE LAYER) (tiles that get walked on)
+	These tiles are simply loaded into a list and get displayed graphically.
+Layer 2 in tiled: Collisions (OBJECT LAYER)
+	This layer can be made by using the Rectangle tool to draw where the player will collide.
+	The rectangles drawn in Tiled eventually get converted to pygame.Rect objects that are checked
+	in a collidelist() to see if the player runs into them.
+Layer 3 in tiled: Walls (TILE LAYER)
+	This layer is also just displayed graphically, but is displayed on top of other tiles.
+Layer 4 in tiled: Roofs (TILE LAYER)
+	This layer is displayed on top of ALL other tiles.

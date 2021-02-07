@@ -3,42 +3,66 @@ import map
 import player
 import npc
 
-# MODES, CONSTANTS
-fps = 40  # frame rate
-WINDOW_X, WINDOW_Y = 800, 600  # Game window size
-WINDOW_X_area, WINDOW_Y_area = 320, 240  # zoom window size
+'''
+# CONSTANTS / VIDEO SETTINGS
+'''
+
+fps = 40  # frame rate (basically)
+WINDOW_X, WINDOW_Y = 800, 600  # System window resolution
+WINDOW_X_area, WINDOW_Y_area = 320, 240  # Game size (gets scaled up to screen resolution)
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
+clock = pygame.time.Clock()  # Clock for animation events etc
+
+'''
+# PYGAME INIT
+'''
 
 pygame.init()  # starts pygame
-clock = pygame.time.Clock()
 window = pygame.display.set_mode((WINDOW_X, WINDOW_Y))  # creates game window
-window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
-world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
-
-
 pygame.display.set_caption("rpg")  # Sets the title for the game window
-# static graphics data
-terrain_default = map.tileset("assets/graphics/overworld.png", 32, 32)
+window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))  # Zooms closer to the player
+# world is the object that all graphics get blit(rendered) onto
+world = pygame.Surface((1600, 1600))
 
-# current map data
-current_map_name = "dungeon_roofs"
+'''
+# LOAD GAME OBJECTS
+'''
+
+# load map
+print("Loading map")
+terrain_default = map.tileset("assets/graphics/overworld.png", 32, 32)  # Creates a tileset for map tiles
+current_map_name = "dungeon_roofs"  # The name of the json file that the map data is stored in
 current_map = map.Map("maps/" + current_map_name + ".json", terrain_default)
 current_map.load_collisions()
 
 # player object
-spawn_location_x = 64
+spawn_location_x = 64  # Where to spawn the player (to later be set by map data
 spawn_location_y = 32
 player = player.Player()
+
+# npc objects
+print("Loading NPCs")
+npc_list = []  # Will later contain all NPC objects / load from map data file
 npc1 = npc.NPC("test")
-# loading game objects
+
+# spawning players and NPCs
 player.spawn(world, spawn_location_x, spawn_location_y)  # spawn the player on the map at position x , y
 npc1.spawn(world, 64, 64)
 
-run = True
-start_time = None
-while run:
-    pygame.time.delay(int(1000 / fps))  # frame refresh
+'''
+# START GAME LOOP
+'''
 
+run = True
+start_time = None  # this is used to make things happen for x amount of time
+while run:
+    pygame.time.delay(int(1000 / fps))  # frame refresh rate
+
+
+# Player movement, see movement.txt in dev manual
+
+
+# Check events / key events 1 time, not continuously
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -47,9 +71,10 @@ while run:
                 player.attacking = True
                 start_time = pygame.time.get_ticks()
 
-    # player controls and collision detection
+# Check key presses continuously
     keys = pygame.key.get_pressed()
 
+# Stops player walking animation if WASD are not pressed
     if not keys[pygame.K_w] or keys[pygame.K_a] or keys[pygame.K_s] or keys[pygame.K_d]:
         player.walking = False
 
@@ -85,15 +110,18 @@ while run:
                 player.walking = True
                 player.move_right()
 
-    # game loop actions
+
+# Graphics (see maps.txt in dev manual)
 
     # load things into the game world
     current_map.load_terrain(world, 32, 32)  # load tiles that are below the player
+
+    # Check if the player is in front of or behind the NPC.
     if player.T_R[1] > npc1.T_R[1]:
         npc1.draw(world, player, start_time)
-        player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
+        player.draw(world, start_time)  # draw the player
     else:
-        player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
+        player.draw(world, start_time)  # draw the player
         npc1.draw(world, player, start_time)
 
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player

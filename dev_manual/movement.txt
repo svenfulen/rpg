@@ -1,0 +1,10 @@
+When a key is pressed, the handler checks:
+1. Map bounds.
+2. Collisions (Done with map helper function)
+3. If the player object is allowed to move in the given direction.
+
+Collisions are handled by a pygame.collidelist() and 4 rects surrounding the player.
+For example, if a rect in collidelist() collides with the player's LEFT rect,
+the player will not be allowed to move left.
+In this case, the player is free to move right, up, or down.
+Once the player moves to the RIGHT, the player will be allowed to move left again.

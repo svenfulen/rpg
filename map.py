@@ -83,6 +83,7 @@ class Map:
             height_box = int(self.map_collisions[box]["height"])
             self.collision_boxes.append(Box(x_box, y_box, width_box, height_box))
 
+    # Checks if any of the player's sides are colliding with a Box rect (wall)
     def detect_collisions(self, player_obj):
         rect_list = [b.rect for b in self.collision_boxes]
 

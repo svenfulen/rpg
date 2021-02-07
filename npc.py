@@ -3,6 +3,7 @@ import json
 import items
 
 
+# This makes the NPC data accessible through json functions.
 with open("data/npc.json") as f:
     npc_data = json.load(f)
 
@@ -71,6 +72,10 @@ class NPC:
         self.bottom_rect = pygame.Rect(self.B_R)
         self.left_rect = pygame.Rect(self.L_R)
         self.right_rect = pygame.Rect(self.R_R)
+        self.center_t_rect = pygame.Rect((self.x_pos + 15), (self.y_pos + 12), 2, 1)
+        self.center_b_rect = pygame.Rect((self.x_pos + 15), (self.y_pos + 15), 2, 1)
+        self.center_l_rect = pygame.Rect((self.x_pos + 14), (self.y_pos + 13), 1, 2)
+        self.center_r_rect = pygame.Rect((self.x_pos + 17), (self.y_pos + 13), 1, 2)
         self.rect = pygame.Rect(self.hit_box)
 
         # health bar
@@ -98,6 +103,10 @@ class NPC:
         self.bottom_rect = pygame.Rect(self.B_R)
         self.left_rect = pygame.Rect(self.L_R)
         self.right_rect = pygame.Rect(self.R_R)
+        self.center_t_rect = pygame.Rect((self.x_pos + 15), (self.y_pos + 12), 2, 1)
+        self.center_b_rect = pygame.Rect((self.x_pos + 15), (self.y_pos + 15), 2, 1)
+        self.center_l_rect = pygame.Rect((self.x_pos + 14), (self.y_pos + 13), 1, 2)
+        self.center_r_rect = pygame.Rect((self.x_pos + 17), (self.y_pos + 13), 1, 2)
 
         # health bar
         self.hp_background = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
@@ -187,10 +196,10 @@ class NPC:
             pygame.draw.rect(surface_to_draw, (0, 255, 0), self.hp_bar)
 
         # pygame.draw.rect(surface_to_draw, (0, 255, 0), self.hit_box, 1)
-        # pygame.draw.rect(surface_to_draw, (0, 0, 255), self.top_rect, 1)
-        # pygame.draw.rect(surface_to_draw, (255, 165, 0), self.bottom_rect, 1)
-        # pygame.draw.rect(surface_to_draw, (255, 0, 0), self.left_rect, 1)
-        # pygame.draw.rect(surface_to_draw, (0, 255, 0), self.right_rect, 1)
+        pygame.draw.rect(surface_to_draw, (0, 0, 255), self.center_t_rect)
+        pygame.draw.rect(surface_to_draw, (255, 165, 0), self.center_b_rect, 1)
+        pygame.draw.rect(surface_to_draw, (255, 0, 0), self.center_l_rect, 1)
+        pygame.draw.rect(surface_to_draw, (0, 255, 0), self.center_r_rect, 1)
 
         # Detect hits / Detect attacks
         if self.rect.colliderect(player.weapon_rect):
@@ -212,4 +221,3 @@ class NPC:
         self.x_pos = self.x_pos + self.walk_speed
         self.x_tile = int(self.x_pos / 32)
 
-    # def attack(self, surface_to_draw):

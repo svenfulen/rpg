@@ -215,4 +215,14 @@ class Player:
         self.x_pos = self.x_pos + self.walk_speed
         self.x_tile = int(self.x_pos / 32)
 
-    # def attack(self, surface_to_draw):
+    def cancel_movement(self, direction):
+        if direction == "U":
+            self.can_move_up = False
+        if direction == "D":
+            self.can_move_down = False
+        if direction == "L":
+            self.can_move_left = False
+        if direction == "R":
+            self.can_move_right = False
+        else:
+            print("Error: cancel_movement incorrect direction string")
