@@ -1,16 +1,17 @@
 import pygame
 import map
 import player
+import npc
 
 # MODES, CONSTANTS
 fps = 40  # frame rate
-WINDOW_X, WINDOW_Y = 1920, 1080  # Game window size
+WINDOW_X, WINDOW_Y = 800, 600  # Game window size
 WINDOW_X_area, WINDOW_Y_area = 320, 240  # zoom window size
 WINDOW_SIZE = (WINDOW_X, WINDOW_Y)
 
 pygame.init()  # starts pygame
 clock = pygame.time.Clock()
-window = pygame.display.set_mode((WINDOW_X, WINDOW_Y),pygame.FULLSCREEN) # creates game window
+window = pygame.display.set_mode((WINDOW_X, WINDOW_Y))  # creates game window
 window_area = pygame.Surface((WINDOW_X_area, WINDOW_Y_area))
 world = pygame.Surface((1600, 1600))  # 50X50 tiles max , can be changed
 
@@ -28,9 +29,11 @@ current_map.load_collisions()
 spawn_location_x = 64
 spawn_location_y = 32
 player = player.Player()
+npc1 = npc.NPC("test")
 # loading game objects
 player.spawn(world, spawn_location_x, spawn_location_y)  # spawn the player on the map at position x , y
-enemy.spawn(world, 64, 64)
+npc1.spawn(world, 64, 64)
+
 run = True
 start_time = None
 while run:
@@ -86,7 +89,13 @@ while run:
 
     # load things into the game world
     current_map.load_terrain(world, 32, 32)  # load tiles that are below the player
-    player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
+    if player.T_R[1] > npc1.T_R[1]:
+        npc1.draw(world, player, start_time)
+        player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
+    else:
+        player.draw(world, start_time)  # draw the player, needs to be refreshed every frame
+        npc1.draw(world, player, start_time)
+
     current_map.load_buildings(world, 32, 32)  # load tiles that are above the player
 
     # blit/scale everything to the game window

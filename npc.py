@@ -1,47 +1,50 @@
 import pygame
+import json
 import items
 
 
+with open("data/npc.json") as f:
+    npc_data = json.load(f)
+
+
 class NPC:
-    def __init__(self, id):  # id will load all the npc attributes from npc.json
-        # player textures
-        self.tx_face_down = pygame.image.load("assets/graphics/chars/base/down.png")
-        self.tx_face_left = pygame.image.load("assets/graphics/chars/base/left.png")
-        self.tx_face_up = pygame.image.load("assets/graphics/chars/base/up.png")
-        self.tx_face_right = pygame.image.load("assets/graphics/chars/base/right.png")
+    def __init__(self, name):  # name will load all the npc attributes from npc.json, player obj for collisions
+        # NPC textures
+        self.tx_face_down = pygame.image.load(npc_data[name][0]["textures"][0]["down"])
+        self.tx_face_left = pygame.image.load(npc_data[name][0]["textures"][0]["left"])
+        self.tx_face_up = pygame.image.load(npc_data[name][0]["textures"][0]["up"])
+        self.tx_face_right = pygame.image.load(npc_data[name][0]["textures"][0]["right"])
 
         # Walk animations
-        self.tx_walk_down = [pygame.image.load("assets/graphics/chars/base/down_walk/dw_1.png"),
-                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_2.png"),
-                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_3.png"),
-                             pygame.image.load("assets/graphics/chars/base/down_walk/dw_4.png")]
+        self.tx_walk_down = [pygame.image.load(npc_data[name][0]["textures"][0]["down_walk"][0]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["down_walk"][1]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["down_walk"][2]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["down_walk"][3])]
 
-        self.tx_walk_left = [pygame.image.load("assets/graphics/chars/base/left_walk/lw_1.png"),
-                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_2.png"),
-                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_3.png"),
-                             pygame.image.load("assets/graphics/chars/base/left_walk/lw_4.png")]
+        self.tx_walk_left = [pygame.image.load(npc_data[name][0]["textures"][0]["left_walk"][0]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["left_walk"][1]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["left_walk"][2]),
+                             pygame.image.load(npc_data[name][0]["textures"][0]["left_walk"][3])]
 
-        self.tx_walk_up = [pygame.image.load("assets/graphics/chars/base/up_walk/uw_1.png"),
-                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_2.png"),
-                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_3.png"),
-                           pygame.image.load("assets/graphics/chars/base/up_walk/uw_4.png")]
+        self.tx_walk_up = [pygame.image.load(npc_data[name][0]["textures"][0]["up_walk"][0]),
+                           pygame.image.load(npc_data[name][0]["textures"][0]["up_walk"][1]),
+                           pygame.image.load(npc_data[name][0]["textures"][0]["up_walk"][2]),
+                           pygame.image.load(npc_data[name][0]["textures"][0]["up_walk"][3])]
 
-        self.tx_walk_right = [pygame.image.load("assets/graphics/chars/base/right_walk/rw_1.png"),
-                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_2.png"),
-                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_3.png"),
-                              pygame.image.load("assets/graphics/chars/base/right_walk/rw_4.png")]
+        self.tx_walk_right = [pygame.image.load(npc_data[name][0]["textures"][0]["right_walk"][0]),
+                              pygame.image.load(npc_data[name][0]["textures"][0]["right_walk"][1]),
+                              pygame.image.load(npc_data[name][0]["textures"][0]["right_walk"][2]),
+                              pygame.image.load(npc_data[name][0]["textures"][0]["right_walk"][3])]
 
         # Stab attack animations
-        self.tx_stab_down = pygame.image.load("assets/graphics/chars/base/stab/down_hit.png")
-        self.tx_stab_left = pygame.image.load("assets/graphics/chars/base/stab/left_hit.png")
-        self.tx_stab_up = pygame.image.load("assets/graphics/chars/base/stab/up_hit.png")
-        self.tx_stab_right = pygame.image.load("assets/graphics/chars/base/stab/right_hit.png")
+        self.tx_stab_down = pygame.image.load(npc_data[name][0]["textures"][0]["down_stab"])
+        self.tx_stab_left = pygame.image.load(npc_data[name][0]["textures"][0]["left_stab"])
+        self.tx_stab_up = pygame.image.load(npc_data[name][0]["textures"][0]["up_stab"])
+        self.tx_stab_right = pygame.image.load(npc_data[name][0]["textures"][0]["right_stab"])
 
-        # player equipment data
+        # equipment data
         self.weapon_equipped = True
-        self.weapon = items.Weapon("test_sword")
-
-        # Player equipment graphics
+        self.weapon = items.Weapon(npc_data[name][0]["default_weapon"])
 
         # player location/velocity/state info
         self.x_pos = 50
@@ -70,12 +73,36 @@ class NPC:
         self.right_rect = pygame.Rect(self.R_R)
         self.rect = pygame.Rect(self.hit_box)
 
+        # health bar
+        self.hp_bar_enabled = True
+        self.hp_background = ((self.x_pos + 10), (self.y_pos + 3), 10, 1)
+        self.hp_bar = ((self.x_pos + 10), (self.y_pos + 3), 10, 1)
+
+        # stats info
+        self.hit_points_max = npc_data[name][0]["HP"]
+        self.hit_points = self.hit_points_max
+
     def spawn(self, surface_to_draw, x, y):  # starts the player off at a certain position
         surface_to_draw.blit(self.tx_face_down, (self.x_pos, self.y_pos))  # spawn the player facing down
         self.x_pos = x
         self.y_pos = y
 
-    def draw(self, surface_to_draw, timer):  # draws the player every frame
+    def draw(self, surface_to_draw, player, timer):  # draws the player every frame
+        self.hit_box = ((self.x_pos + 10), (self.y_pos + 3), 12, 28)
+        self.T_R = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
+        self.B_R = ((self.x_pos + 10), (self.y_pos + 30), 12, 1)
+        self.L_R = ((self.x_pos + 10), (self.y_pos + 4), 1, 26)
+        self.R_R = ((self.x_pos + 21), (self.y_pos + 4), 1, 26)
+        self.rect = pygame.Rect(self.hit_box)
+        self.top_rect = pygame.Rect(self.T_R)
+        self.bottom_rect = pygame.Rect(self.B_R)
+        self.left_rect = pygame.Rect(self.L_R)
+        self.right_rect = pygame.Rect(self.R_R)
+
+        # health bar
+        self.hp_background = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
+        self.hp_bar = ((self.x_pos + 10), (self.y_pos + 3), ((self.hit_points / self.hit_points_max) * 12), 1)
+
         if self.walkCount + 1 >= 16:
             self.walkCount = 0
 
@@ -155,22 +182,19 @@ class NPC:
                     if self.weapon_equipped:
                         surface_to_draw.blit(self.weapon.face_right_texture, (self.x_pos, self.y_pos))
 
-        self.hit_box = ((self.x_pos + 10), (self.y_pos + 3), 12, 28)
-        self.T_R = ((self.x_pos + 10), (self.y_pos + 3), 12, 1)
-        self.B_R = ((self.x_pos + 10), (self.y_pos + 30), 12, 1)
-        self.L_R = ((self.x_pos + 10), (self.y_pos + 4), 1, 26)
-        self.R_R = ((self.x_pos + 21), (self.y_pos + 4), 1, 26)
-        self.rect = pygame.Rect(self.hit_box)
-        self.top_rect = pygame.Rect(self.T_R)
-        self.bottom_rect = pygame.Rect(self.B_R)
-        self.left_rect = pygame.Rect(self.L_R)
-        self.right_rect = pygame.Rect(self.R_R)
+        if self.hp_bar_enabled:
+            pygame.draw.rect(surface_to_draw, (255, 0, 0), self.hp_background)
+            pygame.draw.rect(surface_to_draw, (0, 255, 0), self.hp_bar)
 
         # pygame.draw.rect(surface_to_draw, (0, 255, 0), self.hit_box, 1)
         # pygame.draw.rect(surface_to_draw, (0, 0, 255), self.top_rect, 1)
         # pygame.draw.rect(surface_to_draw, (255, 165, 0), self.bottom_rect, 1)
         # pygame.draw.rect(surface_to_draw, (255, 0, 0), self.left_rect, 1)
         # pygame.draw.rect(surface_to_draw, (0, 255, 0), self.right_rect, 1)
+
+        # Detect hits / Detect attacks
+        if self.rect.colliderect(player.weapon_rect):
+            self.hit_points -= player.weapon_damage
 
     def move_up(self):
         self.y_pos = self.y_pos - self.walk_speed
